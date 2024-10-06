@@ -17,7 +17,6 @@ public class FuncionValidador {
     }
 
   public boolean validarCruceFunciones(FuncionDTO nuevaFuncion, int duracionPelicula, List<FuncionDTO> funcionesExistentes) {
-  
 
 	  LocalTime horaInicioNueva = nuevaFuncion.getHora().toLocalTime();
 	  LocalTime horaFinNueva = horaInicioNueva.plusMinutes(duracionPelicula);
@@ -37,6 +36,12 @@ public class FuncionValidador {
 	  }
 	  return true;
   }
+  
+  // FALTA IMPLEMENTAR
+  	public boolean funcionYaPaso(FuncionDTO funcion) {
+	    LocalDateTime fechaHoraFuncion = LocalDateTime.of(funcion.getFecha().toLocalDate(), funcion.getHora().toLocalTime());
+	    return fechaHoraFuncion.isBefore(LocalDateTime.now());
+	}
       
 
 }

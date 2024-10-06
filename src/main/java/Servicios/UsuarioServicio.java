@@ -1,6 +1,7 @@
 package Servicios;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -71,5 +72,10 @@ public class UsuarioServicio {
 	
 	public String hashPassword(String contrasena) {
 		return BCrypt.hashpw(contrasena, BCrypt.gensalt());
+	}
+	
+	public boolean peliculaVista(int idPelicula, int idUsuario) {
+	    List<Integer> peliculasVistas = usuarioRepositorio.obtenerPeliculasVistasPorUsuario(idUsuario);
+	    return peliculasVistas.contains(idPelicula);
 	}
 }

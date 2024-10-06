@@ -58,16 +58,18 @@ CREATE TABLE comentario (
    contenido TEXT NOT NULL,
    id_usuario INT NOT NULL,
    FOREIGN KEY(id_usuario) REFERENCES usuario(id_usuario) ON DELETE CASCADE,
-   fecha DATETIME NOT NULL
+   fecha DATETIME NOT NULL,
+   id_pelicula INT NOT NULL,
+   FOREIGN KEY(id_pelicula) REFERENCES pelicula(id_pelicula) ON DELETE CASCADE
 );
 
-CREATE TABLE comentario_pelicula (
-	id_comentario_pelicula INT AUTO_INCREMENT PRIMARY KEY,
-	id_comentario INT NOT NULL,
-	FOREIGN KEY(id_comentario) REFERENCES comentario(id_comentario) ON DELETE CASCADE,
-	id_pelicula INT NOT NULL,
-	FOREIGN KEY(id_pelicula) REFERENCES pelicula(id_pelicula) ON DELETE CASCADE
-); 
+-- CREATE TABLE comentario_pelicula (
+-- 	id_comentario_pelicula INT AUTO_INCREMENT PRIMARY KEY,
+-- 	id_comentario INT NOT NULL,
+-- 	FOREIGN KEY(id_comentario) REFERENCES comentario(id_comentario) ON DELETE CASCADE,
+-- 	id_pelicula INT NOT NULL,
+-- 	FOREIGN KEY(id_pelicula) REFERENCES pelicula(id_pelicula) ON DELETE CASCADE
+-- ); 
  	
 CREATE TABLE compra (
    id_compra INT AUTO_INCREMENT PRIMARY KEY,
@@ -92,5 +94,6 @@ CREATE TABLE boleta (
 
 INSERT INTO rol (descripcion) VALUES ('Administrador');
 INSERT INTO rol (descripcion) VALUES ('Cliente');
+
 -- DROP DATABASE db_cine2;
 

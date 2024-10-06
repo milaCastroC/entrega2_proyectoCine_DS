@@ -6,14 +6,16 @@ public class ComentarioDTO {
     
     private int id_comentario;
     private String contenido;
-    private UsuarioDTO usuario;
+    private int idUsuario;
     private Date fecha;
+    private int idPelicula;
 
-    public ComentarioDTO(int id_comentario, String contenido, UsuarioDTO usuario, Date fecha) {
+    public ComentarioDTO(int id_comentario, String contenido, int idUsuario, Date fecha, int idPelicula) {
         this.id_comentario = id_comentario;
         this.contenido = contenido;
-        this.usuario = usuario;
+        this.idUsuario = idUsuario;
         this.fecha = fecha;
+        this.idPelicula = idPelicula;
     }
 
     public int getId_comentario() {
@@ -28,12 +30,12 @@ public class ComentarioDTO {
         this.contenido = contenido;
     }
 
-    public UsuarioDTO getUsuario() {
-        return usuario;
+    public int getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setUsuario(UsuarioDTO usuario) {
-        this.usuario = usuario;
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public Date getFecha() {
@@ -44,5 +46,7 @@ public class ComentarioDTO {
         this.fecha = fecha;
     }
     
-    
+    public int getIdPelicula() {
+    	return idPelicula;
+    }
 }

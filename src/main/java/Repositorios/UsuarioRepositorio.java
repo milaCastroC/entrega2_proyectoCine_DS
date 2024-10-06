@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -147,4 +149,30 @@ public class UsuarioRepositorio {
 	 public String hashPassword(String contrasena) {
 			return BCrypt.hashpw(contrasena, BCrypt.gensalt());
 	 }
+	 
+	 
+	 public List<Integer> obtenerPeliculasVistasPorUsuario(int idUsuario) {
+	        List<Integer> peliculasVistas = new ArrayList<>();
+	        String query = "SELECT DISTINCT f.id_pelicula " +
+	                       "FROM usuario u " +
+	                       "JOIN compra c ON u.id_usuario = c.id_usuario " +
+	                       "JOIN boleta b ON c.id_compra = b.id_compra " +
+	                       "JOIN funcion f ON b.id_funcion = f.id_funcion " +
+	                       "WHERE u.id_usuario = ?";
+
+	        try (Connection connection = DatabaseConfig.getConnection();
+	        	PreparedStatement ps = connection.prepareStatement(query)) {
+	            
+	        	ps.setInt(1, idUsuario);
+	            try (ResultSet rs = ps.executeQuery()) {
+	                while (rs.next()) {
+	                    peliculasVistas.add(rs.getInt("id_pelicula"));
+	                }
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            // Manejo de excepciones apropiado según los requerimientos
+	        }
+	        return peliculasVistas;
+	    }
 }
