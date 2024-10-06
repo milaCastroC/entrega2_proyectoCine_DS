@@ -1,11 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package Vistas;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -19,20 +17,14 @@ import DTOs.SalaDTO;
 import DTOs.UsuarioDTO;
 import Exceptions.PeliculaNoEncontradaException;
 import Exceptions.UsuarioNoEncontradoException;
+import java.awt.Color;
+import java.awt.Component;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
- *
- * @author servi
- */
 public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
 
-    /**
-     * Creates new form CompraBoletas
-     */
-    
     UsuarioDTO usuario;
     ControladorVentanaCompraBoletas controladorVentanaCompraBoletas;
     
@@ -45,6 +37,7 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
         
         llenarCbPeliculas();
         llenaCbFunciones(null);
+        txtCantidad.setText("0");
         
     }
 
@@ -82,29 +75,72 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
     	}
     }
     
-    private void cargarSala(SalaDTO sala){
-    	borrarContenidoPanel();
-    	
-    	JButton[][] sillas = generarMatriz(sala.getCapacidad());
-        int ancho = 50;
-        int alto = 50;
-        int separado = 20;
-        int contador = 1;
-        for(int i= 0; i < sillas.length; i++){
-            for(int j = 0; j < sillas[i].length; j++){
-                //setBounds(posX, posY, ancho, alto)
-                sillas[i][j] = new JButton();
-                sillas[i][j].setBounds(
-                        (j * ancho + separado),//posX
-                        (i * alto + separado),//posY
-                        ancho, alto);
-                sillas[i][j].addActionListener(this); //Cada que se de click se lanza el evento y será resuelto por la ventana
-                sillas[i][j].setText(contador + "");
-                panelMatrizSillas.add(sillas[i][j]); 
-                contador++;
+  private void cargarSala(SalaDTO sala){
+    borrarContenidoPanel();
+
+    JButton[][] sillas = generarMatriz(sala.getCapacidad());
+    int ancho = 50;
+    int alto = 50;
+    int separado = 20;
+    int contador = 1;
+
+    for(int i = 0; i < sillas.length; i++){
+        for(int j = 0; j < sillas[i].length; j++){
+
+            JButton botonSilla = new JButton();
+            botonSilla.setBounds(
+                (j * ancho + separado),
+                (i * alto + separado),  
+                ancho, alto);
+            botonSilla.setText(contador + "");
+            
+            botonSilla.setBackground(Color.WHITE);
+            
+            // Añadir ActionListener para cambiar el color y actualizar sCantidad
+        botonSilla.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int sillasSeleccionadas = Integer.parseInt(txtCantidad.getText());
+
+                if (botonSilla.getBackground() == Color.GRAY) {
+                    botonSilla.setBackground(Color.WHITE);
+                } 
+                else if (sillasSeleccionadas < sala.getCapacidad()) {
+                    botonSilla.setBackground(Color.GRAY);
+                } else {
+                    JOptionPane.showMessageDialog(null, "No puedes seleccionar más sillas.");
+                }
+
+                actualizarCantidad();
+            }
+        });
+
+            panelMatrizSillas.add(botonSilla);
+            contador++;
+        }
+    }
+
+    panelMatrizSillas.revalidate();
+    panelMatrizSillas.repaint();
+}
+
+  private void actualizarCantidad() {
+    int sillasSeleccionadas = 0;
+
+    for (Component comp : panelMatrizSillas.getComponents()) {
+        if (comp instanceof JButton) {
+            JButton boton = (JButton) comp;
+            if (boton.getBackground() == Color.GRAY) {
+                sillasSeleccionadas++;
             }
         }
     }
+
+    txtCantidad.setText(String.valueOf(sillasSeleccionadas));
+    
+    txtCantidad.setEditable(false);
+}
+
     
     private JButton[][] generarMatriz(int cantidadSillas){
     	int columnas = 8;
@@ -142,12 +178,14 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
         jLabel3 = new javax.swing.JLabel();
         cbFunciones = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
-        sCantidad = new javax.swing.JSpinner();
         jLabel5 = new javax.swing.JLabel();
         txtCorreo = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         labelSala = new javax.swing.JLabel();
         btnComprar = new javax.swing.JButton();
+        txtCantidad = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        txtPrecio = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         btnRegresar = new javax.swing.JButton();
         btnCerrarSesion = new javax.swing.JButton();
@@ -190,8 +228,6 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel4.setText("Cantidad:");
 
-        sCantidad.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
-
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel5.setText("Correo:");
 
@@ -208,37 +244,57 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
             }
         });
 
+        txtCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCantidadKeyTyped(evt);
+            }
+        });
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel7.setText("Precio unidad:");
+
+        txtPrecio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrecioKeyTyped(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
-                        .addComponent(sCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(195, 195, 195))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6))
-                        .addGap(29, 29, 29)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(cbPeliculas, 0, 309, Short.MAX_VALUE)
-                            .addComponent(txtCorreo)
-                            .addComponent(labelSala, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cbFunciones, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(33, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnComprar)
                 .addGap(184, 184, 184))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtPrecio, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addComponent(jLabel3)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                            .addComponent(cbFunciones, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel2)
+                                .addComponent(jLabel5)
+                                .addComponent(jLabel6)
+                                .addComponent(jLabel4))
+                            .addGap(23, 23, 23)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(labelSala, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addGap(10, 10, 10)
+                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(txtCorreo, javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(txtCantidad, javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(cbPeliculas, javax.swing.GroupLayout.Alignment.TRAILING, 0, 299, Short.MAX_VALUE)))))))
+                .addGap(23, 23, 23))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -260,10 +316,14 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
                     .addComponent(labelSala, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(sCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(57, 57, 57)
+                    .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(12, 12, 12)
                 .addComponent(btnComprar)
                 .addContainerGap(69, Short.MAX_VALUE))
         );
@@ -353,18 +413,22 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
     private void btnComprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprarActionPerformed
-        if(validarCampos()) {
-        	try {
-        		String correo = txtCorreo.getText();
-        		
-        		LocalDate fecha = LocalDate.now();
-        		java.sql.Date sqlDate = java.sql.Date.valueOf(fecha);
-        		
-        		PeliculaDTO pelicula = (PeliculaDTO)cbPeliculas.getSelectedItem();
-        		FuncionDTO funcion = (FuncionDTO)cbFunciones.getSelectedItem();
-        		int cantidadBoletas = (int)sCantidad.getValue();
-        		
-        		Integer idUsuario = 0;
+    	if(validarCampos()) {
+            try {
+            	
+            	String correo = txtCorreo.getText();
+            	
+            	LocalDate fecha = LocalDate.now();
+                java.sql.Date sqlDate = java.sql.Date.valueOf(fecha);
+                
+                PeliculaDTO pelicula = (PeliculaDTO)cbPeliculas.getSelectedItem();
+                FuncionDTO funcion = (FuncionDTO)cbFunciones.getSelectedItem();
+                int idFuncion = funcion.getId_funcion();
+                int cantidadBoletas = Integer.parseInt(txtCantidad.getText());
+                
+                double precio = Double.parseDouble(txtPrecio.getText());
+                
+            	Integer idUsuario = 0;
         		if(!correo.isEmpty()) {
         			UsuarioDTO cliente = controladorVentanaCompraBoletas.obtenerUsuarioPorCorreo(correo);
         			idUsuario = cliente.getId_usuario();
@@ -375,17 +439,38 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
         	        	return;
         	        }
         		}
-        		CompraDTO compra = new CompraDTO(0, sqlDate, idUsuario, cantidadBoletas);
-        		controladorVentanaCompraBoletas.guardarCompra(compra);
-        		limpiarCampos();
-        		JOptionPane.showMessageDialog(null, "Compra registrada con éxito");
-        	}catch (UsuarioNoEncontradoException ex) {
+        		
+                List<Integer> sillasSeleccionadas = obtenerSillasSeleccionadas(); 
+                
+                
+                
+                CompraDTO compra = new CompraDTO(0, sqlDate, idUsuario, cantidadBoletas);
+                controladorVentanaCompraBoletas.agregarCompra(compra, idFuncion, sillasSeleccionadas, precio);
+                limpiarCampos();
+                borrarContenidoPanel();
+                JOptionPane.showMessageDialog(null, "Compra registrada con éxito");
+            } catch (UsuarioNoEncontradoException ex) {
                 JOptionPane.showMessageDialog(this, "Error al comprar boletas: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-
-			}
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Por favor, rellena todos los campos.", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
+    	}
+
+    	private List<Integer> obtenerSillasSeleccionadas() {
+    	    List<Integer> sillasSeleccionadas = new ArrayList<>();
+
+    	    
+    	    for (Component comp : panelMatrizSillas.getComponents()) {
+    	        if (comp instanceof JButton) {
+    	            JButton boton = (JButton) comp;
+    	            if (boton.getBackground() == Color.GRAY) {  
+    	                int numeroSilla = Integer.parseInt(boton.getText());
+    	                sillasSeleccionadas.add(numeroSilla);
+    	            }
+    	        }
+    	    }
+    	    return sillasSeleccionadas;
     }//GEN-LAST:event_btnComprarActionPerformed
 
     private void cbPeliculasItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbPeliculasItemStateChanged
@@ -409,6 +494,24 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
         }
     }//GEN-LAST:event_cbFuncionesItemStateChanged
 
+    private void txtCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyTyped
+         char c = evt.getKeyChar();
+        if (Character.isLetter(c)) {
+            getToolkit().beep();
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "Por favor, Ingresar solo números", "Error", JOptionPane.ERROR_MESSAGE );
+        }
+    }//GEN-LAST:event_txtCantidadKeyTyped
+
+    private void txtPrecioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioKeyTyped
+         char c = evt.getKeyChar();
+        if (Character.isLetter(c)) {
+            getToolkit().beep();
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "Por favor, Ingresar solo números", "Error", JOptionPane.ERROR_MESSAGE );
+        }
+    }//GEN-LAST:event_txtPrecioKeyTyped
+
     private void borrarContenidoPanel() {
     	panelMatrizSillas.removeAll();  // Elimina todos los componentes del panel
     	panelMatrizSillas.revalidate(); // Revalida el diseño del panel
@@ -416,13 +519,32 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
     }
     
     private boolean validarCampos() {
-    	return !(cbFunciones.getSelectedIndex() == 0 || cbPeliculas.getSelectedIndex() == 0);
+        String cantidad = txtCantidad.getText();
+        String precio = txtPrecio.getText();
+
+        if (cbFunciones.getSelectedIndex() == 0 || cbPeliculas.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(null, "Por favor, selecciona una película y una función.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        if (cantidad.isEmpty() || cantidad.equals("0")) {
+            JOptionPane.showMessageDialog(null, "Por favor, selecciona al menos una silla.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        if (precio.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor, introduce el precio de la boleta.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        return true;
     }
     
     private void limpiarCampos() {
     	cbPeliculas.setSelectedIndex(0);
     	cbFunciones.setSelectedIndex(0);
-    	sCantidad.setValue(1);
+    	txtCantidad.setText("0");
+        txtPrecio.setText("0");
     	txtCorreo.setText("");
     	
     }
@@ -439,15 +561,18 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel labelSala;
     private javax.swing.JPanel panelMatrizSillas;
-    private javax.swing.JSpinner sCantidad;
+    private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextField txtCorreo;
+    private javax.swing.JTextField txtPrecio;
     // End of variables declaration//GEN-END:variables
 
     public void actionPerformed(ActionEvent e) {
-    	System.out.println("Boton presionado");
+        System.out.println("silla seleccionada: ");
     }
+
 }

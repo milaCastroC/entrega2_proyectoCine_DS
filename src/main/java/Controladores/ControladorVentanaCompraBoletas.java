@@ -3,6 +3,7 @@ package Controladores;
 import java.sql.SQLException;
 import java.util.List;
 
+import DTOs.BoletaDTO;
 import DTOs.CompraDTO;
 import DTOs.FuncionDTO;
 import DTOs.PeliculaDTO;
@@ -11,6 +12,7 @@ import DTOs.SillaDTO;
 import DTOs.UsuarioDTO;
 import Exceptions.PeliculaNoEncontradaException;
 import Exceptions.UsuarioNoEncontradoException;
+import Servicios.BoletaServicio;
 import Servicios.CompraServicio;
 import Servicios.FuncionServicio;
 import Servicios.SalaServicio;
@@ -21,6 +23,7 @@ public class ControladorVentanaCompraBoletas {
 
 	private CompraServicio compraServicio = new CompraServicio();
 	
+	private BoletaServicio boletaServicio = new BoletaServicio();
 	private FuncionServicio funcionServicio = new FuncionServicio();
 	private SalaServicio salaServicio = new SalaServicio();
 	private SillaServicio sillaServicio = new SillaServicio();
@@ -30,9 +33,16 @@ public class ControladorVentanaCompraBoletas {
 		return compraServicio.buscarPorId(id);
 	}
 	
-	public void guardarCompra(CompraDTO compra) {
-		compraServicio.agregarCompra(compra);
+	public void agregarCompra(CompraDTO compra, int idFuncion, List<Integer> sillasSeleccionadas, double precio) {
+	    compraServicio.agregarCompra(compra);
+	    int idCompra = compra.getIdCompra();
+
+	    for (Integer idSilla : sillasSeleccionadas) {
+	        BoletaDTO boleta = new BoletaDTO(0, idFuncion, idSilla, idCompra, precio);
+	        boletaServicio.agregarBoleta(boleta);
+	    }
 	}
+
 	
 	public List<PeliculaDTO> obtenerPeliculasConFunciones() throws SQLException, PeliculaNoEncontradaException{
 		return funcionServicio.obtenerPeliculasConFunciones();

@@ -8,9 +8,9 @@ public class BoletaDTO {
    private int id_compra;
    private double precio;
 
-    public BoletaDTO(int id_boleta, int idf_uncion, int id_silla, int id_compra, double precio) {
+    public BoletaDTO(int id_boleta, int id_funcion, int id_silla, int id_compra, double precio) {
         this.id_boleta = id_boleta;
-        this.id_funcion = idf_uncion;
+        this.id_funcion = id_funcion;
         this.id_silla = id_silla;
         this.id_compra = id_compra;
         this.precio = precio;

@@ -35,29 +35,38 @@ public class CompraRepositorio {
 	}
 	
 	public void guardarCompra(CompraDTO compra) {
-		
-		String query = "INSERT INTO compra (id_compra, fecha, id_usuario, cantidad_boletas) VALUES (?, ?, ?, ?)";
-		try(Connection connection = DatabaseConfig.getConnection();
-			PreparedStatement preparedStatement = connection.prepareStatement(query)){
-			
-			preparedStatement.setInt(1, compra.getIdCompra());
-			preparedStatement.setDate(2, compra.getFecha());
-			if(compra.getIdUsuario() != -1) {
-				preparedStatement.setInt(3, compra.getIdUsuario());
-			} else {
-		        preparedStatement.setNull(3, java.sql.Types.INTEGER); // Si es null, insertar NULL
-			}
-			
-			preparedStatement.setInt(4, compra.getCantidad());
 
-			preparedStatement.executeUpdate();
-	        System.out.println("Compra insertado correctamente.");
-		}catch(SQLException e) {
-			System.out.print("ERROR AL GUARDAR");
-			e.printStackTrace();
-		}
+	    String query = "INSERT INTO compra (fecha, id_usuario, cantidad_boletas) VALUES (?, ?, ?)";
+	    
+	    try (Connection connection = DatabaseConfig.getConnection();
+
+	         PreparedStatement preparedStatement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
+	        
+
+	        preparedStatement.setDate(1, compra.getFecha());
+	        if (compra.getIdUsuario() != -1) {
+	            preparedStatement.setInt(2, compra.getIdUsuario());
+	        } else {
+	            preparedStatement.setNull(2, java.sql.Types.INTEGER); 
+	        }
+	        preparedStatement.setInt(3, compra.getCantidad());
+	        
+
+	        preparedStatement.executeUpdate();
+	        
+
+	        ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+	        if (generatedKeys.next()) {
+	            int idGenerado = generatedKeys.getInt(1);
+	            compra.setIdCompra(idGenerado); 
+	            System.out.println("Compra insertada correctamente");
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("ERROR AL GUARDAR");
+	        e.printStackTrace();
+	    }
 	}
-	
+
 	public List<CompraDTO> obtenerComprasPorUsuario(int idUsuario) {
 		List<CompraDTO> compras = new ArrayList<>();
         String query = "SELECT * FROM compra WHERE id_usuario = ?";
