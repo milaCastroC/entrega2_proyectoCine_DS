@@ -1,5 +1,9 @@
-/META-INF/
+/Controladores/
+/DTOs/
+/DatabaseConfig/
+/Exceptions/
 /Repositorios/
 /Servicios/
 /Validadores/
 /Vistas/
+/META-INF/

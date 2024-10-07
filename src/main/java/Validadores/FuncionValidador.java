@@ -1,5 +1,6 @@
 package Validadores;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -41,7 +42,11 @@ public class FuncionValidador {
 	    LocalDateTime fechaHoraFuncion = LocalDateTime.of(funcion.getFecha().toLocalDate(), funcion.getHora().toLocalTime());
 	    return fechaHoraFuncion.isBefore(LocalDateTime.now());
 	}
-      
+     
+  	public boolean validarFechaFuncion(FuncionDTO funcion, LocalDate fechaEstreno) {
+        LocalDate fechaFuncion = funcion.getFecha().toLocalDate();
+        return !fechaFuncion.isBefore(fechaEstreno);
+    }
 
 }
 

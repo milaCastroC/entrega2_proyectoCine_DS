@@ -1,6 +1,7 @@
 package Servicios;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +59,12 @@ public class FuncionServicio {
 		if (!funcionValidador.validarCruceFunciones(funcion,pelicula.getDuracion_minutos(), funcionesExistentes)) {
 			throw new FuncionNoValidaException();
 		}
+		
+	    LocalDate fechaEstreno = pelicula.getFecha_estreno().toLocalDate();
+
+	    if (!funcionValidador.validarFechaFuncion(funcion, fechaEstreno)) {
+	        throw new FechaInvalidaException();
+	    }
 
 		funcionRepositorio.agregarFuncion(funcion);
 	}
