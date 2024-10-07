@@ -1,6 +1,7 @@
 package Controladores;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import DTOs.BoletaDTO;
@@ -13,6 +14,7 @@ import DTOs.UsuarioDTO;
 import Exceptions.PeliculaNoEncontradaException;
 import Exceptions.SillaOcupadaException;
 import Exceptions.UsuarioNoEncontradoException;
+import Servicios.GenerarBoletaPDFServicio;
 import Servicios.BoletaServicio;
 import Servicios.CompraServicio;
 import Servicios.FuncionServicio;
@@ -30,6 +32,8 @@ public class ControladorVentanaCompraBoletas {
 	private SillaServicio sillaServicio = new SillaServicio();
 	private UsuarioServicio usuarioServicio = new UsuarioServicio();
 	
+	private GenerarBoletaPDFServicio boletaPDFRepository = new GenerarBoletaPDFServicio();
+	
 	public CompraDTO buscarPorId(int id) {
 		return compraServicio.buscarPorId(id);
 	}
@@ -37,11 +41,15 @@ public class ControladorVentanaCompraBoletas {
 	public void agregarCompra(CompraDTO compra, int idFuncion, List<Integer> sillasSeleccionadas, double precio) throws SillaOcupadaException {
 	    compraServicio.agregarCompra(compra);
 	    int idCompra = compra.getIdCompra();
+	    
+	    List<BoletaDTO> boletasCompradas = new ArrayList<BoletaDTO>();
 
 	    for (Integer idSilla : sillasSeleccionadas) {
 	        BoletaDTO boleta = new BoletaDTO(0, idFuncion, idSilla, idCompra, precio);
 	        boletaServicio.agregarBoleta(boleta);
+	        boletasCompradas.add(boleta);
 	    }
+	    generarPDFBoletas(compra, boletasCompradas, compra.getIdUsuario());
 	}
 
 	
@@ -67,5 +75,10 @@ public class ControladorVentanaCompraBoletas {
 	
 	public UsuarioDTO obtenerUsuarioPorCorreo(String correo) throws UsuarioNoEncontradoException{
 		return usuarioServicio.obtenerUsuarioPorCorreo(correo);
+	}
+	
+	public void generarPDFBoletas(CompraDTO compra, List<BoletaDTO> boletas, int idUsuario) {
+		UsuarioDTO usuario = usuarioServicio.obtenerUsuarioPorId(idUsuario);
+		boletaPDFRepository.generarBoletaPDF(compra, boletas, usuario);
 	}
 }

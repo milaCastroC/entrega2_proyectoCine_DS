@@ -17,11 +17,11 @@ public class ControladorVentanaLoginUsuarios {
 	
     
     private void crearAdminGeneral() {
-    	UsuarioDTO adminGeneral = new UsuarioDTO("juancho@", "123", UsuarioDTO.ADMINISTRADOR, "juancho", "123445");
+    	UsuarioDTO adminGeneral = new UsuarioDTO("juancho@cinesoft.com", "123", UsuarioDTO.ADMINISTRADOR, "juancho", "123445");
     	try {
     		usuarioServicio.agregarUsuario(adminGeneral);
     	}catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
     }
     

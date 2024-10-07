@@ -14,7 +14,7 @@ import DatabaseConfig.DatabaseConfig;
 public class SillaRepositorio {
 	
 	public SillaDTO buscarSillaPorId(int id) {
-		String query = "SELECT * FROM sala WHERE id_silla = ?";
+		String query = "SELECT * FROM silla WHERE id_silla = ?";
 		try(Connection connection = DatabaseConfig.getConnection();
 			PreparedStatement preparedStatement = connection.prepareStatement(query)){
 			
@@ -24,7 +24,7 @@ public class SillaRepositorio {
 				return new SillaDTO(
 						resultSet.getInt("id_silla"),
 						resultSet.getInt("numero"),
-						resultSet.getInt("idSala")
+						resultSet.getInt("id_sala")
 					);
 			} else {
 				return null;

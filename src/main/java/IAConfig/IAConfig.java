@@ -30,13 +30,17 @@ public class IAConfig {
 		content.add("parts", gson.toJsonTree(new JsonObject[] { part }));
 		requestBody.add("contents", gson.toJsonTree(new JsonObject[] { content }));
 		try {
+			// Hace petición a la API
 			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(API_URL))
 					.header("Content-Type", "application/json").header("x-goog-api-key", API_KEY)
 					.POST(HttpRequest.BodyPublishers.ofString(requestBody.toString())).build();
+			
+			// Recibe la respuesta
 			HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 			JSONObject jsonObj = new JSONObject(response.body());
 			String mensaje = jsonObj.getJSONArray("candidates").getJSONObject(0).getJSONObject("content")
 					.getJSONArray("parts").getJSONObject(0).getString("text");
+			
 			return mensaje;
 		} catch (IOException | InterruptedException e) {
 			System.out.println("Error al clasificar comentari: " + e.getMessage());

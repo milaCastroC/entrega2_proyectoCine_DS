@@ -96,6 +96,5 @@ CREATE TABLE boleta (
 INSERT INTO rol (descripcion) VALUES ('Administrador');
 INSERT INTO rol (descripcion) VALUES ('Cliente');
 
-
 -- DROP DATABASE db_cine2;
 

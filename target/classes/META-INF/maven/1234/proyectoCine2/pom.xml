@@ -30,7 +30,6 @@
     </dependency>
     
     <!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
-    
     <!--mysql-connector-j > Para la conexion con la base de datos -->
 	<dependency>
 	    <groupId>com.mysql</groupId>
@@ -59,6 +58,8 @@
 	    <artifactId>jbcrypt</artifactId>
 	    <version>0.4</version>
 	</dependency>
+	
+	
 	<!-- https://mvnrepository.com/artifact/com.toedter/jcalendar -->
 	<dependency>
 	    <groupId>com.toedter</groupId>
@@ -77,8 +78,36 @@
  	<dependency>
  		<groupId>org.json</groupId>
  		<artifactId>json</artifactId>
- 		<version>20230227</version><!--Olaúltimaversióndisponible-->
+ 		<version>20230227</version><!--O la última versión disponible-->
  	</dependency>
+ 	
+ 	<!-- GENERAR PDF -->
+ 	<!-- iText 7 core -->
+    <!-- Módulo principal de iText 7 (Kernel) -->
+    <dependency>
+        <groupId>com.itextpdf</groupId>
+        <artifactId>kernel</artifactId>
+        <version>7.2.5</version> <!-- Asegúrate de usar una versión compatible -->
+    </dependency>
+
+    <!-- Módulo de Layout para manejo de párrafos y textos -->
+    <dependency>
+        <groupId>com.itextpdf</groupId>
+        <artifactId>layout</artifactId>
+        <version>7.2.5</version>
+    </dependency>
+    
+    <dependency>
+    	<groupId>org.slf4j</groupId>
+    	<artifactId>slf4j-api</artifactId>
+    	<version>1.7.36</version>
+	</dependency>
+
+	<dependency>
+    	<groupId>ch.qos.logback</groupId>
+    	<artifactId>logback-classic</artifactId>
+    	<version>1.2.11</version>
+	</dependency>
 
   </dependencies>
 </project>
