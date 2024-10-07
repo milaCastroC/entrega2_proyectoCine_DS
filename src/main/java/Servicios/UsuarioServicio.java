@@ -7,6 +7,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import DTOs.UsuarioDTO;
 import Exceptions.CorreoContrasenaIncorrectosException;
+import Exceptions.CorreoNoValidoException;
 import Exceptions.UsuarioExistenteException;
 import Exceptions.UsuarioNoEncontradoException;
 import Repositorios.UsuarioRepositorio;
@@ -38,11 +39,13 @@ public class UsuarioServicio {
 		
 	}
 	
-	public void agregarUsuario(UsuarioDTO usuario) throws UsuarioExistenteException {
+	public void agregarUsuario(UsuarioDTO usuario) throws UsuarioExistenteException, CorreoNoValidoException {
 		try {
-			if(usuarioValido(usuario.getCorreo())){
+			
+			if(usuarioValido(usuario.getCorreo()) && usuarioValidador.esCorreoValido(usuario.getCorreo())){
 				usuarioRepositorio.agregarUsuario(usuario);
 			}
+			
 		}catch(SQLException e) {
 			System.out.print("ERROR AL GUARDAR ");
 			e.printStackTrace();

@@ -15,7 +15,8 @@ public class MenuInicioCliente extends javax.swing.JFrame {
     /**
      * Creates new form MenuInicioCliente
      */
-	UsuarioDTO usuario;
+    
+    private UsuarioDTO usuario;
 	
     public MenuInicioCliente(UsuarioDTO usuario) {
         initComponents();
@@ -36,7 +37,7 @@ public class MenuInicioCliente extends javax.swing.JFrame {
         btnCerrarSesion = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         btnPeliculas = new javax.swing.JButton();
-        btnVolver2 = new javax.swing.JButton();
+        btnHistorial = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -57,10 +58,10 @@ public class MenuInicioCliente extends javax.swing.JFrame {
             }
         });
 
-        btnVolver2.setText("HISTORIAL");
-        btnVolver2.addActionListener(new java.awt.event.ActionListener() {
+        btnHistorial.setText("HISTORIAL");
+        btnHistorial.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnVolver2ActionPerformed(evt);
+                btnHistorialActionPerformed(evt);
             }
         });
 
@@ -74,7 +75,7 @@ public class MenuInicioCliente extends javax.swing.JFrame {
                         .addGap(141, 141, 141)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnPeliculas, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnVolver2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(btnHistorial, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(152, 152, 152)
                         .addComponent(jLabel4))
@@ -93,7 +94,7 @@ public class MenuInicioCliente extends javax.swing.JFrame {
                 .addGap(32, 32, 32)
                 .addComponent(btnPeliculas)
                 .addGap(30, 30, 30)
-                .addComponent(btnVolver2)
+                .addComponent(btnHistorial)
                 .addGap(0, 111, Short.MAX_VALUE))
         );
 
@@ -125,15 +126,17 @@ public class MenuInicioCliente extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnPeliculasActionPerformed
 
-    private void btnVolver2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolver2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnVolver2ActionPerformed
+    private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
+        HistorialCompras historialCompras = new HistorialCompras(usuario);
+        historialCompras.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnHistorialActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCerrarSesion;
+    private javax.swing.JButton btnHistorial;
     private javax.swing.JButton btnPeliculas;
-    private javax.swing.JButton btnVolver2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables

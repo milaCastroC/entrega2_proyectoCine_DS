@@ -1,6 +1,7 @@
 package Controladores;
 
 import DTOs.UsuarioDTO;
+import Exceptions.CorreoNoValidoException;
 import Exceptions.UsuarioExistenteException;
 import Servicios.UsuarioServicio;
 
@@ -18,7 +19,7 @@ public class ControladorVentanaRegistroUsuarios {
 		return usuario;
 	}
 	
-	public void guardarUsuario(UsuarioDTO usuario) throws UsuarioExistenteException{
+	public void guardarUsuario(UsuarioDTO usuario) throws UsuarioExistenteException, CorreoNoValidoException{
 		usuarioServicio.agregarUsuario(usuario);
 	}
 }

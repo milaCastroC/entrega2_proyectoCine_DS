@@ -398,8 +398,8 @@ public class PeliculasCliente extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        MenuInicioCliente menuInicioAdmin = new MenuInicioCliente(usuario);
-        menuInicioAdmin.setVisible(true);
+        MenuInicioCliente menuInicioCliente = new MenuInicioCliente(usuario);
+        menuInicioCliente.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 

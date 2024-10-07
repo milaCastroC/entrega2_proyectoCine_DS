@@ -92,66 +92,63 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
     	   llenaCbFunciones(null);
        }
     }    
-  private void cargarSala(SalaDTO sala, int idFuncion){
-    borrarContenidoPanel();
-    
-    List<SillaDTO> sillasOcupadas = controladorVentanaCompraBoletas.obtenerSillasOcupadas(idFuncion);
-    
-    JButton[][] sillas = generarMatriz(sala.getCapacidad());
-    int ancho = 50;
-    int alto = 50;
-    int separado = 20;
-    int contador = 1;
+  
+	private void cargarSala(SalaDTO sala, int idFuncion) {
+		borrarContenidoPanel();
 
-    for(int i = 0; i < sillas.length; i++){
-        for(int j = 0; j < sillas[i].length; j++){
+		List<SillaDTO> sillasOcupadas = controladorVentanaCompraBoletas.obtenerSillasOcupadas(idFuncion);
 
-            JButton botonSilla = new JButton();
-            botonSilla.setBounds(
-                (j * ancho + separado),
-                (i * alto + separado),  
-                ancho, alto);
-            botonSilla.setText(contador + "");
-            
-            boolean sillaOcupada = false;
-            for (SillaDTO silla : sillasOcupadas) {
-                if (silla.getIdentificador() == contador) {
-                    sillaOcupada = true;
-                    break;
-                }
-            }
+		JButton[][] sillas = generarMatriz(sala.getCapacidad());
+		int ancho = 50;
+		int alto = 50;
+		int separado = 20;
+		int contador = 1;
 
-            
-            if (sillaOcupada) {
-                botonSilla.setEnabled(false);  
-            } else {
-                botonSilla.setBackground(Color.WHITE);
-                botonSilla.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        int sillasSeleccionadas = Integer.parseInt(txtCantidad.getText());
+		for (int i = 0; i < sillas.length; i++) {
+			for (int j = 0; j < sillas[i].length; j++) {
 
-                        if (botonSilla.getBackground() == Color.GRAY) {
-                            botonSilla.setBackground(Color.WHITE);
-                        } else if (sillasSeleccionadas < sala.getCapacidad()) {
-                            botonSilla.setBackground(Color.GRAY);
-                        } else {
-                            JOptionPane.showMessageDialog(null, "No puedes seleccionar más sillas.");
-                        }
+				JButton botonSilla = new JButton();
+				botonSilla.setBounds((j * ancho + separado), (i * alto + separado), ancho, alto);
+				botonSilla.setText(contador + "");
 
-                        actualizarCantidad();
-                    }
-                });
-            }
+				boolean sillaOcupada = false;
+				for (SillaDTO silla : sillasOcupadas) {
+					if (silla.getIdentificador() == contador) {
+						sillaOcupada = true;
+						break;
+					}
+				}
 
-            panelMatrizSillas.add(botonSilla);
-            contador++;
-        }
-    }
+				if (sillaOcupada) {
+					botonSilla.setEnabled(false);
+				} else {
+					botonSilla.setBackground(Color.WHITE);
+					botonSilla.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							int sillasSeleccionadas = Integer.parseInt(txtCantidad.getText());
 
-    panelMatrizSillas.revalidate();
-    panelMatrizSillas.repaint();
-}
+							if (botonSilla.getBackground() == Color.GRAY) {
+								botonSilla.setBackground(Color.WHITE);
+							} else if (sillasSeleccionadas < sala.getCapacidad()) {
+								botonSilla.setBackground(Color.GRAY);
+							} else {
+								JOptionPane.showMessageDialog(null, "No puedes seleccionar más sillas.");
+							}
+
+							actualizarCantidad();
+						}
+					});
+				}
+
+				panelMatrizSillas.add(botonSilla);
+				contador++;
+			}
+		}
+
+		panelMatrizSillas.revalidate();
+		panelMatrizSillas.repaint();
+	}
 
   
   private void actualizarCantidad() {
@@ -543,17 +540,10 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
         String precio = txtPrecio.getText();
 
         if (cbFunciones.getSelectedIndex() == 0 || cbPeliculas.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(null, "Por favor, selecciona una película y una función.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return false;
-        }
-
-        if (cantidad.isEmpty() || cantidad.equals("0")) {
-            JOptionPane.showMessageDialog(null, "Por favor, selecciona al menos una silla.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        } else if (cantidad.isEmpty() || cantidad.equals("0")) {
             return false;
-        }
-
-        if (precio.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Por favor, introduce el precio de la boleta.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        } else if (precio.isEmpty()) {
             return false;
         }
 

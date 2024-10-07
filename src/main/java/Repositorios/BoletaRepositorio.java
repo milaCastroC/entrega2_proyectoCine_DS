@@ -2,9 +2,11 @@ package Repositorios;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import DTOs.BoletaDTO;
+import DTOs.CompraDTO;
 import DatabaseConfig.DatabaseConfig;
 
 public class BoletaRepositorio {
@@ -28,4 +30,26 @@ public class BoletaRepositorio {
         }
     }
 	
+	public BoletaDTO obtenerPrimeraBoletaCompra(int idCompra) {
+		String query = "SELECT * FROM boleta WHERE id_compra = ? LIMIT 1";
+		try(Connection connection = DatabaseConfig.getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(query)){
+				
+				preparedStatement.setInt(1, idCompra);
+				ResultSet resultSet = preparedStatement.executeQuery();
+				if(resultSet.next()) {
+					return new BoletaDTO(resultSet.getInt("id_boleta"),
+							resultSet.getInt("id_funcion"),
+							resultSet.getInt("id_silla"),
+							resultSet.getInt("id_compra"),
+							resultSet.getInt("precio"));
+				} else {
+					return null;
+				}
+			}catch (SQLException e) {
+				System.out.print("ERROR AL BUSCAR ");
+				e.printStackTrace();
+			}
+			return null;
+	}
 }

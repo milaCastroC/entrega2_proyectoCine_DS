@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 
 import Controladores.ControladorVentanaRegistroUsuarios;
 import DTOs.UsuarioDTO;
+import Exceptions.CorreoNoValidoException;
 import Exceptions.UsuarioExistenteException;
 
 /**
@@ -211,7 +212,7 @@ public class RegistroUsuarios extends javax.swing.JFrame {
             	controladorVentanaRegistroUsuarios.guardarUsuario(usuario);
             	JOptionPane.showMessageDialog(null, "El usuario se creó correctamente");
             	volverInicio();
-        	}catch(UsuarioExistenteException e) {
+        	}catch(UsuarioExistenteException |CorreoNoValidoException e) {
         		JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         	}
         	

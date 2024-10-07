@@ -1,6 +1,7 @@
 /META-INF/
+/Validadores/
 /Vistas/
-/IAConfig/
-/DTOs/
-/Servicios/
+/Controladores/
 /Repositorios/
+/Servicios/
+/Exceptions/

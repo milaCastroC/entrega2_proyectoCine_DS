@@ -31,4 +31,8 @@ public class BoletaServicio {
         }
         return true; 
    }
+    
+   public BoletaDTO obtenerPrimeraBoletaCompra(int idCompra) {
+	   return boletaRepositorio.obtenerPrimeraBoletaCompra(idCompra);
+   }
 }
