@@ -44,6 +44,7 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
     }
 
     
+    
     public void llenarCbPeliculas() {
     	try {
     		List<PeliculaDTO> peliculasDisponibles = controladorVentanaCompraBoletas.obtenerPeliculasConFunciones();
@@ -78,18 +79,11 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
     }
     
     private void cbFuncionesItemStateChanged1(java.awt.event.ItemEvent evt) {
-        if (cbFunciones.getSelectedIndex() != 0 && cbFunciones.getSelectedIndex() != -1) {
-            FuncionDTO funcion = (FuncionDTO) cbFunciones.getSelectedItem();
-            SalaDTO sala = controladorVentanaCompraBoletas.buscarSala(funcion.getId_sala());
-            labelSala.setText(sala.toString());
-            cargarSala(sala, funcion.getId_funcion());
-        } else {
-            labelSala.setText("");
-        }
+        
     }
     
 
-    private void cbPeliculasItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbPeliculasItemStateChanged
+    private void cbPeliculasItemStateChanged(java.awt.event.ItemEvent evt) {                                             
        if(cbPeliculas.getSelectedIndex() != 0){
            PeliculaDTO pelicula = (PeliculaDTO)cbPeliculas.getSelectedItem();
            llenaCbFunciones(pelicula);
@@ -192,7 +186,7 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
             int puestosFaltantes = cantidadSillas % columnas;
             matriz[matriz.length - 1] = new JButton[puestosFaltantes];
         } else {
-            matriz = new JButton[filas][columnas];
+            matriz = new JButton[filas][columnas]; 
         }
         return matriz;
     }
@@ -212,7 +206,6 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
         jLabel2 = new javax.swing.JLabel();
         cbPeliculas = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
-        cbFunciones = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         txtCorreo = new javax.swing.JTextField();
@@ -222,6 +215,7 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
         txtCantidad = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         txtPrecio = new javax.swing.JTextField();
+        cbFunciones = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         btnRegresar = new javax.swing.JButton();
         btnCerrarSesion = new javax.swing.JButton();
@@ -254,13 +248,6 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel3.setText("Función:");
 
-        cbFunciones.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cbFunciones.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cbFuncionesItemStateChanged1(evt);
-            }
-        });
-
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel4.setText("Cantidad:");
 
@@ -280,6 +267,7 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
             }
         });
 
+        txtCantidad.setEditable(false);
         txtCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtCantidadKeyTyped(evt);
@@ -292,6 +280,13 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
         txtPrecio.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtPrecioKeyTyped(evt);
+            }
+        });
+
+        cbFunciones.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbFunciones.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbFuncionesItemStateChanged(evt);
             }
         });
 
@@ -310,11 +305,9 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtPrecio, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE))
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addComponent(jLabel3)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
-                            .addComponent(cbFunciones, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel3)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(cbFunciones, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel3Layout.createSequentialGroup()
                             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel2)
@@ -344,10 +337,10 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
                     .addComponent(jLabel2)
                     .addComponent(cbPeliculas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbFunciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addGap(10, 10, 10)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(cbFunciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(7, 7, 7)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelSala, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
@@ -527,6 +520,17 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
             JOptionPane.showMessageDialog(null, "Por favor, Ingresar solo números", "Error", JOptionPane.ERROR_MESSAGE );
         }
     }//GEN-LAST:event_txtPrecioKeyTyped
+
+    private void cbFuncionesItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbFuncionesItemStateChanged
+        if (cbFunciones.getSelectedIndex() != 0 && cbFunciones.getSelectedIndex() != -1) {
+            FuncionDTO funcion = (FuncionDTO) cbFunciones.getSelectedItem();
+            SalaDTO sala = controladorVentanaCompraBoletas.buscarSala(funcion.getId_sala());
+            labelSala.setText(sala.toString());
+            cargarSala(sala, funcion.getId_funcion());
+        } else {
+            labelSala.setText("");
+        }
+    }//GEN-LAST:event_cbFuncionesItemStateChanged
 
     private void borrarContenidoPanel() {
     	panelMatrizSillas.removeAll();  // Elimina todos los componentes del panel

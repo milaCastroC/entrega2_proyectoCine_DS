@@ -6,12 +6,18 @@ import DTOs.FuncionDTO;
 import DTOs.PeliculaDTO;
 import DTOs.UsuarioDTO;
 import Exceptions.PeliculaNoEncontradaException;
+import IAConfig.IAConfig;
+
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextPane;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 
 public class PeliculasCliente extends javax.swing.JFrame {
@@ -88,8 +94,9 @@ public class PeliculasCliente extends javax.swing.JFrame {
     		String estructuraComentario = "";
     		
     		UsuarioDTO usuario = controladorVentanaPeliculasCliente.obtenerUsuarioPorId(i.getIdUsuario());
+    		estructuraComentario += "*" + i.getTipo() + "*\n";
     		estructuraComentario += usuario.getNombre() + " - " + i.getFecha() + "\n";
-    		estructuraComentario += i.getContenido() + "\n\n --------------------------------------------------------------\n\n";
+    		estructuraComentario += i.getContenido() + "\n\n--------------------------------------------------------------\n\n";
     		textoComentarios += estructuraComentario;
     	}
     	taComentarios.setText(textoComentarios);
@@ -252,7 +259,7 @@ public class PeliculasCliente extends javax.swing.JFrame {
         );
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel13.setText("Comentarios");
+        jLabel13.setText("Reseñas:");
 
         taComentarios.setEditable(false);
         taComentarios.setColumns(20);
@@ -268,8 +275,8 @@ public class PeliculasCliente extends javax.swing.JFrame {
             .addGroup(panelComentariosLayout.createSequentialGroup()
                 .addGap(12, 12, 12)
                 .addGroup(panelComentariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel13)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel13))
                 .addContainerGap(12, Short.MAX_VALUE))
         );
         panelComentariosLayout.setVerticalGroup(
@@ -278,7 +285,7 @@ public class PeliculasCliente extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel13)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane4)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
                 .addGap(12, 12, 12))
         );
 
@@ -289,9 +296,9 @@ public class PeliculasCliente extends javax.swing.JFrame {
         jScrollPane3.setViewportView(taAgregarComentarios);
 
         jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel12.setText("Agregar Comentario:");
+        jLabel12.setText("Agregar Reseña:");
 
-        btnAgregarComentario.setText("Agregar Comentario");
+        btnAgregarComentario.setText("Publicar");
         btnAgregarComentario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAgregarComentarioActionPerformed(evt);
@@ -383,8 +390,8 @@ public class PeliculasCliente extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
         );
 
         pack();
@@ -424,7 +431,9 @@ public class PeliculasCliente extends javax.swing.JFrame {
         	LocalDate fecha = LocalDate.now();
             java.sql.Date sqlDate = java.sql.Date.valueOf(fecha);
             PeliculaDTO pelicula = (PeliculaDTO)cbPeliculas.getSelectedItem();
-        	ComentarioDTO comentario = new ComentarioDTO(0, contenido, usuario.getId_usuario(), sqlDate, pelicula.getId_pelicula());
+            String tipoComentario = IAConfig.clasificarComentario(contenido);
+            
+        	ComentarioDTO comentario = new ComentarioDTO(0, contenido, usuario.getId_usuario(), sqlDate, pelicula.getId_pelicula(), tipoComentario);
         	
         	controladorVentanaPeliculasCliente.agregarComentario(comentario);
             

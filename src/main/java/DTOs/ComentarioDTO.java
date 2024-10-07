@@ -9,13 +9,15 @@ public class ComentarioDTO {
     private int idUsuario;
     private Date fecha;
     private int idPelicula;
+    private String tipo;
 
-    public ComentarioDTO(int id_comentario, String contenido, int idUsuario, Date fecha, int idPelicula) {
+    public ComentarioDTO(int id_comentario, String contenido, int idUsuario, Date fecha, int idPelicula, String tipo) {
         this.id_comentario = id_comentario;
         this.contenido = contenido;
         this.idUsuario = idUsuario;
         this.fecha = fecha;
         this.idPelicula = idPelicula;
+        this.tipo = tipo;
     }
 
     public int getId_comentario() {
@@ -48,5 +50,13 @@ public class ComentarioDTO {
     
     public int getIdPelicula() {
     	return idPelicula;
+    }
+    
+    public String getTipo() {
+    	return tipo;
+    }
+    
+    public void setTipo(String tipo) {
+    	this.tipo = tipo;
     }
 }

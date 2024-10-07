@@ -26,7 +26,8 @@ public class ComentarioRepositorio {
 						resultSet.getString("contenido"),
 						resultSet.getInt("id_usuario"),
 						resultSet.getDate("fecha"),
-						resultSet.getInt("id_pelicula")
+						resultSet.getInt("id_pelicula"),
+						resultSet.getString("tipo")
 						);
 			} else {
 				return null;
@@ -40,7 +41,7 @@ public class ComentarioRepositorio {
 	
 	public List<ComentarioDTO> obtenerComentariosPorPelicula(int idPelicula){
 		 List<ComentarioDTO> comentarios = new ArrayList<>();
-	        String query = "SELECT * FROM comentario WHERE id_pelicula = ?";
+	        String query = "SELECT * FROM comentario WHERE id_pelicula = ? AND tipo != 'Spam' ";
 	        try (Connection connection = DatabaseConfig.getConnection();
 	             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 	             
@@ -54,7 +55,8 @@ public class ComentarioRepositorio {
 	    						resultSet.getString("contenido"),
 	    						resultSet.getInt("id_usuario"),
 	    						resultSet.getDate("fecha"),
-	    						resultSet.getInt("id_pelicula")
+	    						resultSet.getInt("id_pelicula"),
+	    						resultSet.getString("tipo")
 	                    ));
 	                }
 	            }
@@ -66,7 +68,7 @@ public class ComentarioRepositorio {
 	}
 	
 	public void guardarComentario(ComentarioDTO comentario) {
-		String insertSQL = "INSERT INTO comentario (id_comentario, contenido, id_usuario, fecha, id_pelicula) VALUES (?, ?, ?, ?, ?)";
+		String insertSQL = "INSERT INTO comentario (id_comentario, contenido, id_usuario, fecha, id_pelicula, tipo) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection connection = DatabaseConfig.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(insertSQL)) {
              
@@ -75,6 +77,9 @@ public class ComentarioRepositorio {
             preparedStatement.setInt(3, comentario.getIdUsuario());
             preparedStatement.setDate(4, comentario.getFecha());
             preparedStatement.setInt(5, comentario.getIdPelicula()); 
+            preparedStatement.setInt(5, comentario.getIdPelicula()); 
+            preparedStatement.setString(6, comentario.getTipo()); 
+
             
             preparedStatement.executeUpdate();
             System.out.println("Comentario insertado correctamente.");

@@ -65,6 +65,20 @@
 	    <artifactId>jcalendar</artifactId>
 	    <version>1.4</version>
 	</dependency>
+	
+	<!-- API GOOGLE inteligencia artificial -->
+	 <!--https://mvnrepository.com/artifact/com.konghq/unirest-java-->
+ 	<dependency>
+ 		<groupId>com.google.code.gson</groupId>
+ 		<artifactId>gson</artifactId>
+ 		<version>2.10.1</version>
+ 	</dependency>
+ 	
+ 	<dependency>
+ 		<groupId>org.json</groupId>
+ 		<artifactId>json</artifactId>
+ 		<version>20230227</version><!--Olaúltimaversióndisponible-->
+ 	</dependency>
 
   </dependencies>
 </project>

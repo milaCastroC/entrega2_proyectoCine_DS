@@ -60,7 +60,8 @@ CREATE TABLE comentario (
    FOREIGN KEY(id_usuario) REFERENCES usuario(id_usuario) ON DELETE CASCADE,
    fecha DATETIME NOT NULL,
    id_pelicula INT NOT NULL,
-   FOREIGN KEY(id_pelicula) REFERENCES pelicula(id_pelicula) ON DELETE CASCADE
+   FOREIGN KEY(id_pelicula) REFERENCES pelicula(id_pelicula) ON DELETE CASCADE,
+   tipo VARCHAR(20) NOT NULL 
 );
 
 -- CREATE TABLE comentario_pelicula (
@@ -94,6 +95,7 @@ CREATE TABLE boleta (
 
 INSERT INTO rol (descripcion) VALUES ('Administrador');
 INSERT INTO rol (descripcion) VALUES ('Cliente');
+
 
 -- DROP DATABASE db_cine2;
 
