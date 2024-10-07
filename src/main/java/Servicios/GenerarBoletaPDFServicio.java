@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import javax.mail.MessagingException;
+
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
@@ -27,7 +29,9 @@ public class GenerarBoletaPDFServicio {
     private PeliculaServicio peliculaServicio = new PeliculaServicio();
     private SalaServicio salaServicio = new SalaServicio();
     private SillaServicio sillaServicio = new SillaServicio();
-
+    private CorreoServicio correoServicio = new CorreoServicio();
+    
+    
     public void generarBoletaPDF(CompraDTO compra, List<BoletaDTO> boletas, UsuarioDTO usuario) {
         // Generar un nombre único para el archivo PDF en la carpeta PDFsBoletas
         String directoryPath = "./PDFsBoletas/";
@@ -79,6 +83,15 @@ public class GenerarBoletaPDFServicio {
             // Cerrar el documento
             document.close();
             System.out.println("Compra generada con éxito en el archivo: " + fileName);
+            
+            // Enviar correo si el usuario está registrado
+            if (usuario != null && !usuario.getCorreo().isEmpty()) {
+                try {
+                    correoServicio.enviarCorreoCompra(usuario.getCorreo(), "Compra de Boleta", "Adjunto encontrará su boleta de compra.", fileName);
+                } catch (MessagingException e) {
+                    e.printStackTrace(); // Manejo de excepción al enviar correo
+                }
+            }
 
         } catch (FileNotFoundException e) {
             e.printStackTrace(); 

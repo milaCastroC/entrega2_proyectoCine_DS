@@ -40,6 +40,7 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
         llenarCbPeliculas();
         llenaCbFunciones(null);
         txtCantidad.setText("0");
+        txtPrecio.setText("0");
         
     }
 
@@ -76,12 +77,7 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
     		cbFunciones.removeAllItems();
     		cbFunciones.addItem("--Seleccione una función--");
     	}
-    }
-    
-    private void cbFuncionesItemStateChanged1(java.awt.event.ItemEvent evt) {
-        
-    }
-    
+    }    
 
     private void cbPeliculasItemStateChanged(java.awt.event.ItemEvent evt) {                                             
        if(cbPeliculas.getSelectedIndex() != 0){
@@ -543,7 +539,7 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
             return false;
         } else if (cantidad.isEmpty() || cantidad.equals("0")) {
             return false;
-        } else if (precio.isEmpty()) {
+        } else if (precio.isEmpty() || precio.equals("0")) {
             return false;
         }
 

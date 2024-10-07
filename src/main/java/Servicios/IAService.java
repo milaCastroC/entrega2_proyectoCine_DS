@@ -1,4 +1,4 @@
-package IAConfig;
+package Servicios;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -11,7 +11,7 @@ import java.util.Scanner;
 import org.json.JSONObject;
 import io.github.cdimascio.dotenv.Dotenv;
 
-public class IAConfig {
+public class IAService {
 	private static final Dotenv dotenv = Dotenv.load();
 	private static final String API_KEY = dotenv.get("API_KEY");
 	private static final String API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent";

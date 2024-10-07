@@ -3,7 +3,7 @@ package Servicios;
 import java.util.List;
 
 import DTOs.ComentarioDTO;
-import IAConfig.IAConfig;
+import Servicios.IAService;
 import Repositorios.ComentarioRepositorio;
 
 public class ComentarioServicio {

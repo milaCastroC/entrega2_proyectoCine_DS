@@ -3,6 +3,8 @@ package Servicios;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.mail.MessagingException;
+
 import org.mindrot.jbcrypt.BCrypt;
 
 import DTOs.UsuarioDTO;
@@ -17,6 +19,7 @@ public class UsuarioServicio {
 	
 	private UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
 	private UsuarioValidador usuarioValidador = new UsuarioValidador();
+	private CorreoServicio correoServicio = new CorreoServicio();
 	
 	public UsuarioDTO obtenerUsuarioPorId(int id){
 		UsuarioDTO usuario = null;
@@ -44,11 +47,16 @@ public class UsuarioServicio {
 			
 			if(usuarioValido(usuario.getCorreo()) && usuarioValidador.esCorreoValido(usuario.getCorreo())){
 				usuarioRepositorio.agregarUsuario(usuario);
+				
+				 // Enviar correo de confirmación
+                String asunto = "¡Bienvenido a nuestra plataforma!";
+                String cuerpoMensaje = "Hola " + usuario.getNombre() + ",\n\nGracias por registrarte en nuestro sitio. ¡Esperamos que disfrutes de tu experiencia!";
+                correoServicio.enviarCorreoRegistro(usuario.getCorreo(), asunto, cuerpoMensaje);
 			}
 			
-		}catch(SQLException e) {
+		}catch(SQLException | MessagingException ex) {
 			System.out.print("ERROR AL GUARDAR ");
-			e.printStackTrace();
+			ex.printStackTrace();
 		}
 		
 	}

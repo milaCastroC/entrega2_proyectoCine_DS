@@ -6,7 +6,7 @@ import DTOs.FuncionDTO;
 import DTOs.PeliculaDTO;
 import DTOs.UsuarioDTO;
 import Exceptions.PeliculaNoEncontradaException;
-import IAConfig.IAConfig;
+import Servicios.IAService;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -431,7 +431,7 @@ public class PeliculasCliente extends javax.swing.JFrame {
         	LocalDate fecha = LocalDate.now();
             java.sql.Date sqlDate = java.sql.Date.valueOf(fecha);
             PeliculaDTO pelicula = (PeliculaDTO)cbPeliculas.getSelectedItem();
-            String tipoComentario = IAConfig.clasificarComentario(contenido);
+            String tipoComentario = IAService.clasificarComentario(contenido);
             
         	ComentarioDTO comentario = new ComentarioDTO(0, contenido, usuario.getId_usuario(), sqlDate, pelicula.getId_pelicula(), tipoComentario);
         	
