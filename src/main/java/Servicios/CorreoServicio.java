@@ -14,10 +14,12 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.Multipart;
 import javax.mail.internet.MimeMultipart;
 
-public class CorreoServicio {
+import io.github.cdimascio.dotenv.Dotenv;
 
-	   private final String remitente = "cinesoft36@gmail.com";
-	   private final String contrasena = "inxa ttnw qdjb fies";
+public class CorreoServicio {
+		private static final Dotenv dotenv = Dotenv.load();
+		private final String remitente = "cinesoft36@gmail.com";
+		private final String CORREO_KEY = dotenv.get("CORREO_KEY");
 	   
 	   public void enviarCorreoRegistro(String destinatario, String asunto, String cuerpoMensaje) throws MessagingException {
 
@@ -32,7 +34,7 @@ public class CorreoServicio {
 	        Session session = Session.getInstance(props, new Authenticator() {
 	            @Override
 	            protected PasswordAuthentication getPasswordAuthentication() {
-	                return new PasswordAuthentication(remitente, contrasena);
+	                return new PasswordAuthentication(remitente, CORREO_KEY);
 	            }
 	        });
 
@@ -42,7 +44,7 @@ public class CorreoServicio {
 	            message.setFrom(new InternetAddress(remitente));
 	            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
 	            message.setSubject(asunto);
-	            message.setText(cuerpoMensaje);
+	            message.setContent(cuerpoMensaje, "text/html; charset=ISO-8859-1");
 
 	            // Enviar el mensaje
 	            Transport.send(message);
@@ -65,7 +67,7 @@ public class CorreoServicio {
 		    Session session = Session.getInstance(props, new Authenticator() {
 		        @Override
 		        protected PasswordAuthentication getPasswordAuthentication() {
-		            return new PasswordAuthentication(remitente, contrasena);
+		            return new PasswordAuthentication(remitente, CORREO_KEY);
 		        }
 		    });
 
