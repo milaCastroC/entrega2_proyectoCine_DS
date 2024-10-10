@@ -21,6 +21,6 @@ public class UsuarioValidador {
         	return true;
         }
         throw new CorreoNoValidoException();
-	}
+	} 
 	
 }

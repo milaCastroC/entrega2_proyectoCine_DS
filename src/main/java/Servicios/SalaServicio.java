@@ -8,7 +8,7 @@ import Exceptions.CapacidadNoValidaException;
 import Repositorios.SalaRepositorio;
 import Validadores.SalaValidador;
 
-public class SalaServicio {
+public class SalaServicio { 
 	
 	private SalaRepositorio salaRepositorio = new SalaRepositorio();
 	private SalaValidador salaValidador = new SalaValidador();

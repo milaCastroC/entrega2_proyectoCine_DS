@@ -29,8 +29,8 @@ public class UsuarioServicio {
 			System.out.print("NO SE ENCONTRÓ EL USUARIO ");
 			e.printStackTrace();
 		}
-		return usuario;
-	}
+		return usuario; 
+	} 
 	
 	public UsuarioDTO obtenerUsuarioPorCorreo(String correo) throws UsuarioNoEncontradoException{
 		UsuarioDTO usuario = usuarioRepositorio.buscarUsuarioPorCorreo(correo);
@@ -54,7 +54,7 @@ public class UsuarioServicio {
 			ex.printStackTrace();
 		}
 		
-	}
+	} 
 	
 	public boolean usuarioValido(String correo) throws UsuarioExistenteException {
 			UsuarioDTO usuario = usuarioRepositorio.buscarUsuarioPorCorreo(correo);
