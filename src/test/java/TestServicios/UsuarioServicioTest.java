@@ -35,7 +35,7 @@ class UsuarioServicioTest {
     private UsuarioServicio usuarioValidadorMock;
 	
 	@Mock
-    private CorreoServicio correoServicioMock;
+    private CorreoServicio correoServicio;
 	
 	
 	
@@ -82,7 +82,7 @@ class UsuarioServicioTest {
         when(usuarioRepositorioMock.buscarUsuarioPorCorreo("Pepito@cine.com")).thenReturn(null);
         usuarioServicio.agregarUsuario(usuario);
 
-        verify(correoServicioMock).enviarCorreoRegistro(usuario); //Verifica que se envió el correo
+        verify(correoServicio).enviarCorreoRegistro(usuario); //Verifica que se envió el correo
     } 
     
     @Test
