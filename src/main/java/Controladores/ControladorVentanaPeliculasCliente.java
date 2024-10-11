@@ -10,6 +10,7 @@ import DTOs.UsuarioDTO;
 import Exceptions.PeliculaNoEncontradaException;
 import Servicios.ComentarioServicio;
 import Servicios.FuncionServicio;
+import Servicios.IAService;
 import Servicios.PeliculaServicio;
 import Servicios.UsuarioServicio;
 
@@ -19,6 +20,7 @@ public class ControladorVentanaPeliculasCliente {
 	ComentarioServicio comentarioServicio = new ComentarioServicio();
 	UsuarioServicio usuarioServicio = new UsuarioServicio();
 	FuncionServicio funcionServicio = new FuncionServicio();
+	IAService iaService = new IAService();
 	
 	public List<PeliculaDTO> obtenerPeliculas() throws SQLException{
 		return peliculaServicio.obtenerPeliculas();
@@ -47,4 +49,8 @@ public class ControladorVentanaPeliculasCliente {
 	public boolean funcionYaPaso(FuncionDTO funcion) {
     	return funcionServicio.funcionYaPaso(funcion);
     }
+	
+	public String clasificarComentario(String comentario) {
+		return iaService.clasificarComentario(comentario);
+	}
 }
