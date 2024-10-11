@@ -39,7 +39,7 @@ class SalaServicioTest {
     
 
     @BeforeEach
-    void setUp() {
+    void antes() {
         MockitoAnnotations.openMocks(this);
         
 
