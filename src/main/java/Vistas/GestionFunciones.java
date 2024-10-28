@@ -38,20 +38,26 @@ private void cargarFunciones() {
             List<FuncionDTO> listaFunciones = controladorGestionFunciones.obtenerTodasLasFunciones();
             DefaultTableModel model = new DefaultTableModel();
             model.setColumnIdentifiers(new Object[]{
-                "ID", "Código función", "Sala", "Fecha", "Hora", "Película"
+                "Código", "Sala", "Fecha", "Hora", "Película", "Estado"
             });
             
             for (int i = 0; i < listaFunciones.size(); i++){
                 FuncionDTO funcion = listaFunciones.get(i);
                 SalaDTO sala = controladorGestionFunciones.obtenerSala(funcion.getId_sala());
                 PeliculaDTO pelicula = controladorGestionFunciones.obtenerPelicula(funcion.getId_pelicula());
+                String estado = "";
+                if(controladorGestionFunciones.funcionYaPaso(funcion)) {
+                	estado = "PASADA";
+                } else {
+                	estado = "PROGRAMADA";
+                }
                 model.addRow(new Object[]{
-                    funcion.getId_funcion(),
                     funcion.getCodigo_funcion(),
                     sala.toString(),
                     funcion.getFecha(),
                     funcion.getHora(),
-                    pelicula.getNombre()
+                    pelicula.getNombre(),
+                    estado
                 });
             }
             

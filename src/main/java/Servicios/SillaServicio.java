@@ -1,7 +1,15 @@
 package Servicios;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import DTOs.SalaDTO;
 import DTOs.SillaDTO;
+import DatabaseConfig.DatabaseConfig;
 import Repositorios.SillaRepositorio;
 
 public class SillaServicio {
@@ -24,4 +32,10 @@ public class SillaServicio {
 	public SillaDTO[][] obtenerMatrizSillas(SalaDTO sala){
 		return sillaRepositorio.obtenerMatrizSillas(sala);
 	}
+	
+	public List<SillaDTO> obtenerSillasOcupadasPorFuncion(int idFuncion) {
+       return sillaRepositorio.obtenerSillasOcupadasPorFuncion(idFuncion);
+    }
+	
+	
 }

@@ -37,7 +37,6 @@ public class FuncionValidador {
 	  return true;
   }
   
-  // FALTA IMPLEMENTAR
   	public boolean funcionYaPaso(FuncionDTO funcion) {
 	    LocalDateTime fechaHoraFuncion = LocalDateTime.of(funcion.getFecha().toLocalDate(), funcion.getHora().toLocalTime());
 	    return fechaHoraFuncion.isBefore(LocalDateTime.now());

@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import DTOs.SalaDTO;
 import DTOs.SillaDTO;
 import DatabaseConfig.DatabaseConfig;
@@ -128,4 +131,33 @@ public class SillaRepositorio {
         }
         return matriz;
 	}
+	
+	 public List<SillaDTO> obtenerSillasOcupadasPorFuncion(int idFuncion) {
+	        List<SillaDTO> sillasOcupadas = new ArrayList<>();
+	        
+	        String query = "SELECT s.id_silla, s.numero, s.id_sala " +
+	                       "FROM boleta b " +
+	                       "JOIN silla s ON b.id_silla = s.id_silla " +
+	                       "WHERE b.id_funcion = ?";
+
+	        try (Connection connection = DatabaseConfig.getConnection();
+	             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+	             
+	            preparedStatement.setInt(1, idFuncion);
+	            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+	                while (resultSet.next()) {
+	                    SillaDTO silla = new SillaDTO(
+	                        resultSet.getInt("id_silla"),
+	                        resultSet.getInt("numero"),
+	                        resultSet.getInt("id_sala")
+	                    );
+	                    sillasOcupadas.add(silla);
+	                }
+	            }
+	        } catch (SQLException e) {
+	            System.err.println("ERROR AL OBTENER SILLAS OCUPADAS");
+	            e.printStackTrace();
+	        }
+	        return sillasOcupadas;
+	    }
 }

@@ -62,4 +62,7 @@ public class ControladorVentanaGestionFunciones {
     	return peliculaServicio.buscarPorId(id);
     }
 	
+    public boolean funcionYaPaso(FuncionDTO funcion) {
+    	return funcionServicio.funcionYaPaso(funcion);
+    }
 }

@@ -14,8 +14,10 @@ import DTOs.CompraDTO;
 import DTOs.FuncionDTO;
 import DTOs.PeliculaDTO;
 import DTOs.SalaDTO;
+import DTOs.SillaDTO;
 import DTOs.UsuarioDTO;
 import Exceptions.PeliculaNoEncontradaException;
+import Exceptions.SillaOcupadaException;
 import Exceptions.UsuarioNoEncontradoException;
 import java.awt.Color;
 import java.awt.Component;
@@ -75,9 +77,32 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
     	}
     }
     
-  private void cargarSala(SalaDTO sala){
-    borrarContenidoPanel();
+    private void cbFuncionesItemStateChanged1(java.awt.event.ItemEvent evt) {
+        if (cbFunciones.getSelectedIndex() != 0 && cbFunciones.getSelectedIndex() != -1) {
+            FuncionDTO funcion = (FuncionDTO) cbFunciones.getSelectedItem();
+            SalaDTO sala = controladorVentanaCompraBoletas.buscarSala(funcion.getId_sala());
+            labelSala.setText(sala.toString());
+            cargarSala(sala, funcion.getId_funcion());
+        } else {
+            labelSala.setText("");
+        }
+    }
+    
 
+    private void cbPeliculasItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbPeliculasItemStateChanged
+       if(cbPeliculas.getSelectedIndex() != 0){
+           PeliculaDTO pelicula = (PeliculaDTO)cbPeliculas.getSelectedItem();
+           llenaCbFunciones(pelicula);
+           borrarContenidoPanel();
+       } else {
+    	   llenaCbFunciones(null);
+       }
+    }    
+  private void cargarSala(SalaDTO sala, int idFuncion){
+    borrarContenidoPanel();
+    
+    List<SillaDTO> sillasOcupadas = controladorVentanaCompraBoletas.obtenerSillasOcupadas(idFuncion);
+    
     JButton[][] sillas = generarMatriz(sala.getCapacidad());
     int ancho = 50;
     int alto = 50;
@@ -94,26 +119,36 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
                 ancho, alto);
             botonSilla.setText(contador + "");
             
-            botonSilla.setBackground(Color.WHITE);
-            
-            // Añadir ActionListener para cambiar el color y actualizar sCantidad
-        botonSilla.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int sillasSeleccionadas = Integer.parseInt(txtCantidad.getText());
-
-                if (botonSilla.getBackground() == Color.GRAY) {
-                    botonSilla.setBackground(Color.WHITE);
-                } 
-                else if (sillasSeleccionadas < sala.getCapacidad()) {
-                    botonSilla.setBackground(Color.GRAY);
-                } else {
-                    JOptionPane.showMessageDialog(null, "No puedes seleccionar más sillas.");
+            boolean sillaOcupada = false;
+            for (SillaDTO silla : sillasOcupadas) {
+                if (silla.getIdentificador() == contador) {
+                    sillaOcupada = true;
+                    break;
                 }
-
-                actualizarCantidad();
             }
-        });
+
+            
+            if (sillaOcupada) {
+                botonSilla.setEnabled(false);  
+            } else {
+                botonSilla.setBackground(Color.WHITE);
+                botonSilla.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        int sillasSeleccionadas = Integer.parseInt(txtCantidad.getText());
+
+                        if (botonSilla.getBackground() == Color.GRAY) {
+                            botonSilla.setBackground(Color.WHITE);
+                        } else if (sillasSeleccionadas < sala.getCapacidad()) {
+                            botonSilla.setBackground(Color.GRAY);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "No puedes seleccionar más sillas.");
+                        }
+
+                        actualizarCantidad();
+                    }
+                });
+            }
 
             panelMatrizSillas.add(botonSilla);
             contador++;
@@ -124,6 +159,7 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
     panelMatrizSillas.repaint();
 }
 
+  
   private void actualizarCantidad() {
     int sillasSeleccionadas = 0;
 
@@ -221,7 +257,7 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
         cbFunciones.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbFunciones.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cbFuncionesItemStateChanged(evt);
+                cbFuncionesItemStateChanged1(evt);
             }
         });
 
@@ -415,7 +451,7 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
     private void btnComprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprarActionPerformed
     	if(validarCampos()) {
             try {
-            	
+
             	String correo = txtCorreo.getText();
             	
             	LocalDate fecha = LocalDate.now();
@@ -449,13 +485,14 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
                 limpiarCampos();
                 borrarContenidoPanel();
                 JOptionPane.showMessageDialog(null, "Compra registrada con éxito");
-            } catch (UsuarioNoEncontradoException ex) {
+            } catch (UsuarioNoEncontradoException | SillaOcupadaException ex) {
                 JOptionPane.showMessageDialog(this, "Error al comprar boletas: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                borrarContenidoPanel();
             }
         } else {
             JOptionPane.showMessageDialog(this, "Por favor, rellena todos los campos.", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
-    	}
+    }
 
     	private List<Integer> obtenerSillasSeleccionadas() {
     	    List<Integer> sillasSeleccionadas = new ArrayList<>();
@@ -472,27 +509,6 @@ public class CompraBoletas extends javax.swing.JFrame implements ActionListener{
     	    }
     	    return sillasSeleccionadas;
     }//GEN-LAST:event_btnComprarActionPerformed
-
-    private void cbPeliculasItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbPeliculasItemStateChanged
-       if(cbPeliculas.getSelectedIndex() != 0){
-           PeliculaDTO pelicula = (PeliculaDTO)cbPeliculas.getSelectedItem();
-           llenaCbFunciones(pelicula);
-           borrarContenidoPanel();
-       } else {
-    	   llenaCbFunciones(null);
-       }
-    }//GEN-LAST:event_cbPeliculasItemStateChanged
-
-    private void cbFuncionesItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbFuncionesItemStateChanged
-    	if(cbFunciones.getSelectedIndex() != 0 && cbFunciones.getSelectedIndex() != -1){
-            FuncionDTO funcion = (FuncionDTO)cbFunciones.getSelectedItem();
-            SalaDTO sala = controladorVentanaCompraBoletas.buscarSala(funcion.getId_sala());
-            labelSala.setText(sala.toString());
-            cargarSala(sala);
-        } else {
-        	labelSala.setText("");
-        }
-    }//GEN-LAST:event_cbFuncionesItemStateChanged
 
     private void txtCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyTyped
          char c = evt.getKeyChar();

@@ -43,4 +43,8 @@ public class ControladorVentanaPeliculasCliente {
 	public void agregarComentario(ComentarioDTO comentario) {
 		comentarioServicio.guardarComentario(comentario);
 	}
+	
+	public boolean funcionYaPaso(FuncionDTO funcion) {
+    	return funcionServicio.funcionYaPaso(funcion);
+    }
 }

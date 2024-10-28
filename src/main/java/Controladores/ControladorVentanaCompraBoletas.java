@@ -11,6 +11,7 @@ import DTOs.SalaDTO;
 import DTOs.SillaDTO;
 import DTOs.UsuarioDTO;
 import Exceptions.PeliculaNoEncontradaException;
+import Exceptions.SillaOcupadaException;
 import Exceptions.UsuarioNoEncontradoException;
 import Servicios.BoletaServicio;
 import Servicios.CompraServicio;
@@ -33,7 +34,7 @@ public class ControladorVentanaCompraBoletas {
 		return compraServicio.buscarPorId(id);
 	}
 	
-	public void agregarCompra(CompraDTO compra, int idFuncion, List<Integer> sillasSeleccionadas, double precio) {
+	public void agregarCompra(CompraDTO compra, int idFuncion, List<Integer> sillasSeleccionadas, double precio) throws SillaOcupadaException {
 	    compraServicio.agregarCompra(compra);
 	    int idCompra = compra.getIdCompra();
 
@@ -50,6 +51,10 @@ public class ControladorVentanaCompraBoletas {
 	
 	public List<FuncionDTO> obtenerFuncionesPorPelicula(int id) throws SQLException, PeliculaNoEncontradaException{
 		return funcionServicio.obtenerFuncionesPorPelicula(id);
+	}
+	
+	public List<SillaDTO> obtenerSillasOcupadas(int idFuncion) {
+		return sillaServicio.obtenerSillasOcupadasPorFuncion(idFuncion);
 	}
 	
 	public SalaDTO buscarSala(int id) {

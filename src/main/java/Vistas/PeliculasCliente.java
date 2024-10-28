@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Vistas;
 
 import Controladores.ControladorVentanaPeliculasCliente;
@@ -17,16 +13,10 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author servi
- */
+
 public class PeliculasCliente extends javax.swing.JFrame {
 
-    /**
-     * Creates new form PeliculasCliente
-     */
-    
+
     private UsuarioDTO usuario;
     private ControladorVentanaPeliculasCliente controladorVentanaPeliculasCliente;
     
@@ -54,25 +44,34 @@ public class PeliculasCliente extends javax.swing.JFrame {
     	}
     }
     
-    private void llenarListaFunciones(int idPelicula) {
-    	try {
-    		List<FuncionDTO> funciones = controladorVentanaPeliculasCliente.obtenerFuncionesPorPelicula(idPelicula);
-    		DefaultListModel<String> modelo = new DefaultListModel<>();
-            
-            if(!funciones.isEmpty()){
-            	for (FuncionDTO funcion : funciones) {
-                    modelo.addElement(funcion.toString());
-                }
-            } else {
-            	modelo.addElement("NO HAY FUNCIONES DISPONIBLES");
-            }
-            
-            listaFunciones.setModel(modelo);
+	private void llenarListaFunciones(int idPelicula) {
+		try {
+			List<FuncionDTO> funciones = controladorVentanaPeliculasCliente.obtenerFuncionesPorPelicula(idPelicula);
+			DefaultListModel<String> modelo = new DefaultListModel<>();
+
+			if (!funciones.isEmpty()) {
+				for (FuncionDTO funcion : funciones) {
+					String textoFuncion;
+
+					// Utiliza el método del controlador para verificar si la función ya pasó
+					if (controladorVentanaPeliculasCliente.funcionYaPaso(funcion)) {
+						textoFuncion = "[FUNCION PASADA] " + funcion.toString();
+					} else {
+						textoFuncion = funcion.toString();
+					}
+
+					modelo.addElement(textoFuncion);
+				}
+			} else {
+				modelo.addElement("NO HAY FUNCIONES DISPONIBLES");
+			}
+
+			listaFunciones.setModel(modelo);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-    }
-    
+	}
+
     private void mostrarAgregarComentario(int idPelicula) {
     	if(controladorVentanaPeliculasCliente.peliculaVista(idPelicula, usuario.getId_usuario())) {
     		panelAgregarComentario.setVisible(true);

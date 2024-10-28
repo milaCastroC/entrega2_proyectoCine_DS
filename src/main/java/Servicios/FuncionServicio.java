@@ -98,4 +98,8 @@ public class FuncionServicio {
     	}
     	return peliculas;
     }
+    
+    public boolean funcionYaPaso(FuncionDTO funcion) {
+    	return funcionValidador.funcionYaPaso(funcion);
+    }
 }
